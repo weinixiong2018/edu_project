@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.teacher.mapper.EduTeacherMapper">
+    <resultMap id="baseResultMap" type="com.guli.teacher.entity.EduTeacher">
+        <result column="id" jdbcType="CHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="intro" jdbcType="VARCHAR" property="intro"/>
+        <result column="career" jdbcType="VARCHAR" property="career"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <select id="getTeacherList" resultMap="baseResultMap">
+        select id,name,intro,career,level,avatar,sort,is_deleted,gmt_create,gmt_modified from edu_teacher where is_deleted = 0;
+    </select>
+
+    <update id="removeById" parameterType="java.lang.String">
+        update edu_teacher set  is_deleted = 1 where id = #{id};
+    </update>
+
+    <insert id="insertTeacher" parameterType="com.guli.teacher.entity.EduTeacher">
+        insert into edu_teacher (id,name,intro,career,level,avatar,sort,is_deleted,gmt_create,gmt_modified)
+        values (#{teacher.id},#{teacher.name},#{teacher.intro},#{teacher.career},#{teacher.level},#{teacher.avatar},#{teacher.sort},#{teacher.isDeleted},now(),now());
+    </insert>
+
+    <select id="getTeacherById" parameterType="com.guli.teacher.entity.EduTeacher" resultMap="baseResultMap">
+        select id,name,intro,career,level,avatar,sort from edu_teacher where id = #{id} and is_deleted = 0;
+    </select>
+
+    <update id="updateTeacher" parameterType="com.guli.teacher.entity.EduTeacher">
+        update edu_teacher
+        <trim prefix="set" suffixOverrides=",">
+            <if test="teacher.name != null">
+                name = #{teacher.name},
+            </if>
+            <if test="teacher.intro != null">
+                intro = #{teacher.intro},
+            </if>
+            <if test="teacher.career != null">
+                career = #{teacher.career},
+            </if>
+            <if test="teacher.level != null">
+                level = #{teacher.level},
+            </if>
+            <if test="teacher.avatar != null">
+                avatar = #{teacher.avatar},
+            </if>
+            <if test="teacher.sort != null">
+                sort = #{teacher.sort},
+            </if>
+            gmt_modified = now(),
+        </trim>
+        where id = #{teacher.id};
+
+    </update>
+
+    <select id="selectTeacherByPage" resultMap="baseResultMap">
+        select id,name,intro,career,level,avatar,sort from edu_teacher
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="searchTeacherVo.name != null and searchTeacherVo.name != ''">
+                name regexp #{searchTeacherVo.name} and
+            </if>
+            <if test="searchTeacherVo.level != null and searchTeacherVo.level != 0">
+                level = #{searchTeacherVo.level} and
+            </if>
+            <if test="searchTeacherVo.gmtCreate != null">
+                gmt_create &gt;= #{searchTeacherVo.gmtCreate} and
+            </if>
+            <if test="searchTeacherVo.gmtCreate != null and searchTeacherVo.gmtModified != null">
+                gmt_create &gt;= #{searchTeacherVo.gmtCreate} and gmt_modified &lt;= #{searchTeacherVo.gmtModified} and
+            </if>
+            is_deleted=0
+        </trim>
+        limit #{searchTeacherVo.page},#{searchTeacherVo.limit};
+    </select>
+
+    <select id="getTotal" parameterType="com.guli.teacher.vo.SearchTeacherVo" resultType="java.lang.Long">
+        select count(*) from edu_teacher
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="searchTeacherVo.name != null and searchTeacherVo.name != ''">
+                name regexp #{searchTeacherVo.name} and
+            </if>
+            <if test="searchTeacherVo.level != null and searchTeacherVo.level != 0">
+                level = #{searchTeacherVo.level} and
+            </if>
+            <if test="searchTeacherVo.gmtCreate != null">
+                gmt_create &gt;= #{searchTeacherVo.gmtCreate} and
+            </if>
+            <if test="searchTeacherVo.gmtCreate != null and searchTeacherVo.gmtModified != null">
+                gmt_create &gt;= #{searchTeacherVo.gmtCreate} and gmt_modified &lt;= #{searchTeacherVo.gmtModified} and
+            </if>
+            is_deleted = 0;
+        </trim>
+    </select>
+</mapper>
