@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.teacher.mapper.EduCourseMapper">
+    <resultMap id="baseResultMap" type="com.guli.teacher.entity.EduCourse">
+        <result column="id" jdbcType="CHAR" property="id"/>
+        <result column="teacher_id" jdbcType="CHAR" property="teacherId"/>
+        <result column="subject_id" jdbcType="CHAR" property="subjectId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="lesson_num" jdbcType="INTEGER" property="lessonNum"/>
+        <result column="cover" jdbcType="VARCHAR" property="cover"/>
+        <result column="buy_count" jdbcType="INTEGER" property="buyCount"/>
+        <result column="view_count" jdbcType="INTEGER" property="viewCount"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <insert id="insertCourse" parameterType="com.guli.teacher.entity.EduCourse">
+        insert into edu_course(id,teacher_id,subject_id,title,price,lesson_num,cover,buy_count,view_count,version,status,gmt_create,gmt_modified)
+        values(#{eduCourse.id},#{eduCourse.teacherId},#{eduCourse.subjectId},#{eduCourse.title},#{eduCourse.price},#{eduCourse.lessonNum},#{eduCourse.cover},#{eduCourse.buyCount},#{eduCourse.viewCount},#{eduCourse.version},#{eduCourse.status},now(),now());
+    </insert>
+</mapper>

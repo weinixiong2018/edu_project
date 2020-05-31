@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.teacher.mapper.EduSubjectMapper">
+    <resultMap id="baseResultMap" type="com.guli.teacher.entity.EduSubject">
+        <result column="id" jdbcType="CHAR" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="parent_id" jdbcType="CHAR" property="parentId"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <select id="getSubjectTitle" resultMap="baseResultMap">
+        select id,title,parent_id from edu_subject;
+    </select>
+
+    <insert id="insertEduSubject" parameterType="com.guli.teacher.entity.EduSubject" useGeneratedKeys="true" keyProperty="id">
+        insert into edu_subject (title,parent_id,sort,gmt_create,gmt_modified)
+        values(#{eduSubject.title},#{eduSubject.parentId},#{eduSubject.sort},now(),now());
+    </insert>
+
+    <insert id="appendSubject">
+        insert into edu_subject (title,parent_id,sort,gmt_create,gmt_modified)
+        values(#{eduSubject.title},#{eduSubject.parentId},#{eduSubject.sort},now(),now());
+    </insert>
+
+<!--    <insert id="appendTwoLevel">-->
+<!--        insert into edu_subject (title,parent_id,sort,gmt_create,gmt_modified)-->
+<!--        values(#{eduSubject.title},#{id},#{eduSubject.sort},now(),now());-->
+<!--    </insert>-->
+
+    <delete id="deleteSubject">
+        delete from edu_subject where id = #{id};
+    </delete>
+
+
+</mapper>

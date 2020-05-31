@@ -8,10 +8,10 @@ import java.util.Date;
 @Data
 public class EduSubject {
 
-  private String id;
+  private int id;
   private String title;
   private String parentId;
-  private long sort;
+  private long sort=0;
   private Date gmtCreate;
   private Date gmtModified;
 

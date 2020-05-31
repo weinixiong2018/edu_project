@@ -14,9 +14,9 @@ public class EduCourse {
   private double price;
   private long lessonNum;
   private String cover;
-  private long buyCount;
-  private long viewCount;
-  private long version;
+  private long buyCount = 0;
+  private long viewCount = 0;
+  private long version = 1;
   private String status;
   private Date gmtCreate;
   private Date gmtModified;

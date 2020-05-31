@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guli.teacher.mapper.EduCourseDescriptionMapper">
+    <resultMap id="baseResultMap" type="com.guli.teacher.entity.EduCourseDescription">
+        <result column="id" jdbcType="CHAR" property="id"/>
+        <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <insert id="insertCourseDescription" parameterType="com.guli.teacher.entity.EduCourseDescription">
+        insert into edu_course_description(id,description,gmt_create,gmt_modified)
+        values(#{eduCourseDescription.id},#{eduCourseDescription.description},now(),now());
+    </insert>
+</mapper>
