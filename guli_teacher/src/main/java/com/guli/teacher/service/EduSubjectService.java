@@ -11,7 +11,7 @@ public interface EduSubjectService {
 
     List<OneClassSubject> getSubjectList();
 
-    int deleteSubject(int id);
+    int deleteSubject(String id);
 
     int appendSubject(EduSubject eduSubject);
 

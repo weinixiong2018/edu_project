@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class OneClassSubject {
+public class OneChapter {
 
     private String id;
+    private String courseId;
     private String title;
-    private List<TwoClassSubject> twoClassSubjects = new ArrayList<>();
 
+    private List<TwoVideo> Children = new ArrayList<>();
 }

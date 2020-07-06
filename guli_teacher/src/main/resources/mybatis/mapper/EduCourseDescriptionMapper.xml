@@ -12,4 +12,23 @@
         insert into edu_course_description(id,description,gmt_create,gmt_modified)
         values(#{eduCourseDescription.id},#{eduCourseDescription.description},now(),now());
     </insert>
+
+    <select id="getDescriptionById" parameterType="java.lang.String" resultMap="baseResultMap">
+        select id,description from edu_course_description where id = #{id};
+    </select>
+
+    <update id="updateDescription" parameterType="com.guli.teacher.entity.EduCourseDescription">
+        update edu_course_description
+        <trim prefix="set" suffixOverrides=",">
+            <if test="eduCourseDescription.description != null">
+                description = #{eduCourseDescription.description},
+            </if>
+            gmt_modified = now(),
+        </trim>
+        where id = #{eduCourseDescription.id};
+    </update>
+
+    <delete id="deleteCourseById" parameterType="java.lang.String">
+        delete from edu_course_description where id = #{id};
+    </delete>
 </mapper>

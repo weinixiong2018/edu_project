@@ -8,7 +8,7 @@ public class CreateIdUtil {
 
     public static String getResultId() {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHMMss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
 
         String resultId = sdf.format(new Date());

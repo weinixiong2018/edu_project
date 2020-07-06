@@ -3,6 +3,7 @@ package com.guli.teacher.service.impl;
 import com.guli.teacher.entity.EduSubject;
 import com.guli.teacher.mapper.EduSubjectMapper;
 import com.guli.teacher.service.EduSubjectService;
+import com.guli.teacher.utils.CreateIdUtil;
 import com.guli.teacher.utils.entityutils.OneClassSubject;
 import com.guli.teacher.utils.entityutils.TwoClassSubject;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +33,8 @@ public class EduSubjectServiceImpl implements EduSubjectService {
     @Override
     public int appendSubject(EduSubject eduSubject) {
         List<EduSubject> lists = eduSubjectMapper.getSubjectTitle();
-        int returnNumber = isEquals(eduSubject.getTitle(), lists);
-        if (returnNumber == 0) {
+        String returnNumber = isEquals(eduSubject.getTitle(), lists);
+        if (returnNumber == null) {
             int i = eduSubjectMapper.appendSubject(eduSubject);
             return i;
         }
@@ -48,7 +49,7 @@ public class EduSubjectServiceImpl implements EduSubjectService {
 //    }
 
     @Override
-    public int deleteSubject(int id) {
+    public int deleteSubject(String id) {
 
         int i = eduSubjectMapper.deleteSubject(id);
         return i;
@@ -72,7 +73,7 @@ public class EduSubjectServiceImpl implements EduSubjectService {
 
                 //获取二级目录
                 for (int j = 0; j < size; j++) {
-                    if (lists.get(i).getId() == Integer.parseInt(lists.get(j).getParentId())) {
+                    if (lists.get(i).getId().equals(lists.get(j).getParentId())) {
                         TwoClassSubject twoClassSubject = new TwoClassSubject();
                         BeanUtils.copyProperties(lists.get(j), twoClassSubject);
                         twoClassSubjectList.add(twoClassSubject);
@@ -120,16 +121,17 @@ public class EduSubjectServiceImpl implements EduSubjectService {
                     msgList.add("第" + (i + 1) + "行第一列数据为空");
                     continue;
                 }
-                String pid = null;
-                int returnIdOne = isEquals(cellValue, listFromDatabase);
-                if (returnIdOne == 0) {
+                String pid;
+                String returnIdOne = isEquals(cellValue, listFromDatabase);
+                if (returnIdOne == null) {
                     EduSubject eduSubject = new EduSubject();
+                    eduSubject.setId(CreateIdUtil.getResultId());
                     eduSubject.setTitle(cellValue);
                     eduSubject.setParentId("0");
-                    int id = eduSubjectMapper.insertEduSubject(eduSubject);
-                    pid = String.valueOf(id);
+                    String id = eduSubjectMapper.insertEduSubject(eduSubject);
+                    pid = id;
                 } else {
-                    pid = String.valueOf(returnIdOne);
+                    pid = returnIdOne;
                 }
 
                 Cell cell2 = row.getCell(1);
@@ -142,9 +144,10 @@ public class EduSubjectServiceImpl implements EduSubjectService {
                     msgList.add("第" + (i + 1) + "行第二列数据为空");
                     continue;
                 }
-                int returnIdTwo = isEquals(cellValue2, listFromDatabase);
-                if (returnIdTwo == 0) {
+                String returnIdTwo = isEquals(cellValue2, listFromDatabase);
+                if (returnIdTwo == null) {
                     EduSubject eduSubject = new EduSubject();
+                    eduSubject.setId(CreateIdUtil.getResultId());
                     eduSubject.setTitle(cellValue2);
                     eduSubject.setParentId(pid);
                     eduSubjectMapper.insertEduSubject(eduSubject);
@@ -157,12 +160,12 @@ public class EduSubjectServiceImpl implements EduSubjectService {
         return msgList;
     }
 
-    private int isEquals(String str, List<EduSubject> list) {
+    private String isEquals(String str, List<EduSubject> list) {
         for (int i = 0; i < list.size(); i++) {
             if (str.equals(list.get(i).getTitle())) {
                 return list.get(i).getId();
             }
         }
-        return 0;
+        return null;
     }
 }

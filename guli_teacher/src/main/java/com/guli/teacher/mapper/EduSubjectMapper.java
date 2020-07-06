@@ -8,9 +8,9 @@ import java.util.List;
 public interface EduSubjectMapper {
     List<EduSubject> getSubjectTitle();
 
-    int insertEduSubject(@Param("eduSubject") EduSubject eduSubject);
+    String insertEduSubject(@Param("eduSubject") EduSubject eduSubject);
 
-    int deleteSubject(int id);
+    int deleteSubject(String id);
 
     int appendSubject(@Param("eduSubject") EduSubject eduSubject);
 

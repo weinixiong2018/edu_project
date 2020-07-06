@@ -63,7 +63,7 @@ public class EduSubjectController {
 //    }
 
     @DeleteMapping("/delete/{id}")
-    public Result deleteSubject(@PathVariable int id) {
+    public Result deleteSubject(@PathVariable String id) {
         int i = subjectService.deleteSubject(id);
         if(i == 1) {
             return Result.ok().message("删除成功");

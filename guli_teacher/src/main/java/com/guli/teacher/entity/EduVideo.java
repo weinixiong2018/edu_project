@@ -1,9 +1,6 @@
 package com.guli.teacher.entity;
 
-
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class EduVideo {
@@ -20,8 +17,7 @@ public class EduVideo {
   private String status;
   private long size;
   private long version;
-  private Date gmtCreate;
-  private Date gmtModified;
-
+  private java.sql.Timestamp gmtCreate;
+  private java.sql.Timestamp gmtModified;
 
 }

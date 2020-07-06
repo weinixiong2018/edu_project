@@ -21,4 +21,28 @@ public class EduCourseDescriptionServiceImpl implements EduCourseDescriptionServ
         //log.info("i={}",i);
         return i;
     }
+
+    @Override
+    public EduCourseDescription getDescriptionById(String id) {
+        EduCourseDescription eduCourseDescription = eduCourseDescriptionMapper.getDescriptionById(id);
+        if(eduCourseDescription == null) {
+            return null;
+        }
+        return eduCourseDescription;
+    }
+
+    @Override
+    public int updateDescription(EduCourseDescription eduCourseDescription) {
+        int result = eduCourseDescriptionMapper.updateDescription(eduCourseDescription);
+        if(result == 0) {
+            return 0;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deleteCourseById(String id) {
+        Integer result = eduCourseDescriptionMapper.deleteCourseById(id);
+        return result == 1;
+    }
 }

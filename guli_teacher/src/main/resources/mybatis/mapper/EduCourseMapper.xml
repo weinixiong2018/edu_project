@@ -4,6 +4,7 @@
     <resultMap id="baseResultMap" type="com.guli.teacher.entity.EduCourse">
         <result column="id" jdbcType="CHAR" property="id"/>
         <result column="teacher_id" jdbcType="CHAR" property="teacherId"/>
+        <result column="subject_parent_id" jdbcType="CHAR" property="subjectParentId"/>
         <result column="subject_id" jdbcType="CHAR" property="subjectId"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="price" jdbcType="DOUBLE" property="price"/>
@@ -18,7 +19,81 @@
     </resultMap>
 
     <insert id="insertCourse" parameterType="com.guli.teacher.entity.EduCourse">
-        insert into edu_course(id,teacher_id,subject_id,title,price,lesson_num,cover,buy_count,view_count,version,status,gmt_create,gmt_modified)
+        insert into edu_course(id,teacher_id,subject_parent_id,subject_id,title,price,lesson_num,cover,buy_count,view_count,version,status,gmt_create,gmt_modified)
         values(#{eduCourse.id},#{eduCourse.teacherId},#{eduCourse.subjectId},#{eduCourse.title},#{eduCourse.price},#{eduCourse.lessonNum},#{eduCourse.cover},#{eduCourse.buyCount},#{eduCourse.viewCount},#{eduCourse.version},#{eduCourse.status},now(),now());
     </insert>
+
+    <select id="getCourseById" parameterType="java.lang.String" resultMap="baseResultMap">
+        select id,teacher_id,subject_parent_id,subject_id,title,price,lesson_num,cover,buy_count,view_count,version,status from edu_course where id = #{id};
+    </select>
+
+    <update id="updateCourse" parameterType="com.guli.teacher.entity.EduCourse">
+        update edu_course
+        <trim prefix="set" suffixOverrides=",">
+            <if test="eduCourse.teacherId != null">
+                teacher_id = #{eduCourse.teacherId},
+            </if>
+            <if test="eduCourse.subjectParentId != null">
+                subject_parent_id = #{eduCourse.subjectParentId},
+            </if>
+            <if test="eduCourse.subjectId != null">
+                subject_id = #{eduCourse.subjectId},
+            </if>
+            <if test="eduCourse.title != null">
+                title = #{eduCourse.title},
+            </if>
+            <if test="eduCourse.price != null">
+                price = #{eduCourse.price},
+            </if>
+            <if test="eduCourse.lessonNum != null">
+                lesson_num = #{eduCourse.lessonNum},
+            </if>
+            <if test="eduCourse.cover != null">
+                cover = #{eduCourse.cover},
+            </if>
+            gmt_modified = now(),
+        </trim>
+        where id = #{eduCourse.id};
+    </update>
+
+    <select id="getCourseInfo" parameterType="com.guli.teacher.vo.CourseSearchVo" resultMap="baseResultMap">
+        select id,title,price,lesson_num,buy_count,cover,gmt_create,gmt_modified from edu_course
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="eduCourse.title != null and eduCourse.title != ''">
+                title regexp #{eduCourse.title} and
+            </if>
+            <if test="eduCourse.subjectParentId != null and eduCourse.subjectParentId != ''">
+                subject_parent_id = #{eduCourse.subjectParentId} and
+            </if>
+            <if test="eduCourse.subjectId != null and eduCourse.subjectId != ''">
+                subject_id = #{eduCourse.subjectId} and
+            </if>
+            <if test="eduCourse.teacherId != null and eduCourse.teacherId != ''">
+                teacher_id = #{eduCourse.teacherId}
+            </if>
+        </trim>
+        limit #{eduCourse.page},#{eduCourse.limit};
+    </select>
+
+    <select id="getTotal" parameterType="com.guli.teacher.vo.SearchCourseVo" resultType="java.lang.Long">
+        select count(*) from edu_course
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="eduCourse.title != null and eduCourse.title != ''">
+                title regexp #{eduCourse.title} and
+            </if>
+            <if test="eduCourse.subjectParentId != null and eduCourse.subjectParentId != ''">
+                subject_parent_id = #{eduCourse.subjectParentId} and
+            </if>
+            <if test="eduCourse.subjectId != null and eduCourse.subjectId != ''">
+                subject_id = #{eduCourse.subjectId} and
+            </if>
+            <if test="eduCourse.teacherId != null and eduCourse.teacherId != ''">
+                teacher_id = #{eduCourse.teacherId}
+            </if>
+        </trim>
+    </select>
+
+    <delete id="deleteCourseById" parameterType="java.lang.String">
+        delete from edu_course where id = #{id};
+    </delete>
 </mapper>
